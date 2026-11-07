@@ -26,6 +26,7 @@
   --water-soft:#D5E8F0;
   --sun:#F2C14E;
   --hill1:#9CC28F; --hill2:#6FA36A; --hill3:#3F7A4A;
+  --sand:#E2CFA4; --sand-bg:#F3EBDA;
   --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
   --f-body:"Golos Text", "Segoe UI", Roboto, system-ui, sans-serif;
   --r:18px;
@@ -37,6 +38,7 @@
     --moss:#7FC28F; --moss-soft:#1D3424; --lichen:#C6E07A; --rowan:#F0805E; --rowan-soft:#3A2018;
     --water:#6CB9DA; --water-soft:#14303C; --sun:#E8B84A;
     --hill1:#2B4A30; --hill2:#22402A; --hill3:#18311F;
+    --sand:#6B5A3A; --sand-bg:#1E1B13;
     color-scheme:dark;
   }
 }
@@ -45,6 +47,7 @@
   --moss:#7FC28F; --moss-soft:#1D3424; --lichen:#C6E07A; --rowan:#F0805E; --rowan-soft:#3A2018;
   --water:#6CB9DA; --water-soft:#14303C; --sun:#E8B84A;
   --hill1:#2B4A30; --hill2:#22402A; --hill3:#18311F;
+  --sand:#6B5A3A; --sand-bg:#1E1B13;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -242,6 +245,81 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   .logo span{display:none}
   .item-emoji{font-size:76px}
 }
+
+/* aral */
+.aral{background:var(--sand-bg)}
+.aral-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
+.cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;max-width:420px}
+.cells i{aspect-ratio:1;border-radius:4px;background:var(--sand);display:block;max-width:100%}
+.cells i.w{background:var(--water)}
+.cells-cap{display:flex;gap:18px;flex-wrap:wrap;font-size:15px;color:var(--muted);margin-top:12px}
+.cells-cap span{display:inline-flex;gap:8px;align-items:center}
+.cells-cap b{width:14px;height:14px;border-radius:3px;display:inline-block}
+.stat-big{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,6vw,64px);line-height:1;color:var(--rowan);font-variant-numeric:tabular-nums}
+.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:30px}
+.stats3 div{display:grid;gap:6px;align-content:start;border-top:3px solid var(--ink);padding-top:14px}
+.stats3 .stat-big{font-size:clamp(30px,4vw,42px)}
+.stats3 p{font-size:15.5px;color:var(--muted)}
+.years{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.years li{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.years li:last-child{border-bottom:0}
+.years b{font-family:var(--f-display);font-size:17px;color:var(--water);font-variant-numeric:tabular-nums}
+.years span{font-size:16.5px}
+.years li.hope b{color:var(--moss)}
+.aral-do{margin-top:30px;background:var(--card);border-radius:24px;padding:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.aral-do div{display:grid;gap:6px;align-content:start}
+.aral-do p{font-size:15.5px;color:var(--muted)}
+
+/* air */
+.air-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:36px;align-items:center}
+.pm{background:var(--card);border-radius:24px;padding:26px;display:grid;gap:16px}
+.pm-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;align-items:center}
+.pm-row span{font-size:14.5px;font-weight:600;color:var(--muted)}
+.pm-bar{height:34px;border-radius:0 10px 10px 0;display:flex;align-items:center;padding:0 12px;font-weight:700;font-size:15px;color:#fff;white-space:nowrap}
+.sources{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:30px}
+.sources div{background:var(--card);border-radius:16px;padding:16px;display:grid;gap:6px;align-content:start;font-size:15px}
+.sources b{font-size:16px}
+.sources span{color:var(--muted)}
+.aqi-box{margin-top:40px;background:var(--card);border-radius:24px;padding:clamp(18px,3vw,30px);display:grid;gap:20px}
+.aqi-scale{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.aqi-btn{appearance:none;border:3px solid transparent;font:inherit;cursor:pointer;border-radius:14px;padding:12px 6px;display:grid;gap:2px;justify-items:center;color:#1b1b1b;transition:transform .15s}
+.aqi-btn b{font-size:15px;font-variant-numeric:tabular-nums}
+.aqi-btn small{font-size:12px;line-height:1.2;text-align:center}
+.aqi-btn[aria-pressed="true"]{border-color:var(--ink);transform:translateY(-4px)}
+.aqi-out{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+.aqi-out h3{font-size:22px}
+.aqi-out ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:16.5px}
+.aqi-face{font-size:15px;color:var(--muted)}
+.check-links{display:flex;flex-wrap:wrap;gap:10px}
+.check-links a{font-weight:700;font-size:15px;text-decoration:none;padding:10px 16px;border-radius:999px;border:2px solid var(--moss);color:var(--moss)}
+.check-links a:hover{background:var(--moss);color:var(--paper)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;margin-top:20px}
+.two .col{background:var(--card);border-radius:24px;padding:26px;display:grid;gap:14px;align-content:start}
+.two ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.two li{display:flex;gap:12px;align-items:flex-start;font-size:16.5px}
+.two li::before{content:"";flex:none;width:12px;height:12px;margin-top:7px;border-radius:50%;background:var(--water)}
+.two .col.do li::before{background:var(--moss)}
+
+/* adults */
+.adults{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.ad{background:var(--card);border-radius:24px;padding:26px;display:grid;gap:12px;align-content:start;border:1px solid var(--line)}
+.ad .k{font-family:var(--f-display);font-weight:800;font-size:15px;color:var(--rowan);letter-spacing:.02em}
+.ad h3{font-size:22px}
+.ad p{font-size:16.5px;color:var(--muted)}
+.ad .try{font-size:15.5px;color:var(--ink);background:var(--moss-soft);border-radius:12px;padding:12px 14px}
+.mirror{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;background:var(--ink);color:var(--paper);border-radius:24px;padding:clamp(22px,4vw,36px);margin-bottom:24px}
+.mirror .stat-big{color:var(--lichen)}
+.mirror p{font-size:clamp(17px,2vw,20px);max-width:52ch}
+@media (max-width:900px){
+  .aral-grid,.air-top,.aqi-out{grid-template-columns:minmax(0,1fr)}
+  .sources{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .aral-do{grid-template-columns:minmax(0,1fr)}
+  .aqi-scale{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .stats3,.two,.adults{grid-template-columns:minmax(0,1fr)}
+  .mirror{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 
 </head>
@@ -254,6 +332,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
     </a>
     <nav aria-label="Разделы сайта">
       <a href="#why">Зачем</a>
+      <a href="#aral">Арал</a>
+      <a href="#air">Воздух</a>
+      <a href="#adults">Пример взрослых</a>
       <a href="#how">Как объяснять</a>
       <a href="#game">Игра</a>
       <a href="#time">Мусор и время</a>
@@ -270,7 +351,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
 <!-- HERO -->
 <section class="hero">
   <div class="wrap hero-grid">
-    <p class="eyebrow">Экология для семьи · школа для глухих и слабослышащих детей</p>
+    <p class="eyebrow">Экология для семьи · Узбекистан · школа для глухих и слабослышащих детей</p>
     <h1>Природа говорит <span class="quiet">без слов</span></h1>
     <p class="lead">Пчела показывает дорогу танцем, слон чувствует сородичей ногами, осенний лист сам рассказывает, что пришла осень. Вашему ребёнку не нужен звук, чтобы понять природу и научиться её беречь. Здесь собрано всё, что поможет родителям говорить об экологии глазами, руками и общими делами.</p>
     <div class="hero-meta">
@@ -335,6 +416,113 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
         <h3>Общие дела укрепляют связь</h3>
         <p>Экологические привычки появляются, когда ими живёт вся семья. А совместные занятия дают ещё и время на общение, новые жесты и слова.</p>
       </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ARAL -->
+<section id="aral" class="aral">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Узбекистан · Приаралье</p>
+      <h2>Море, которое исчезло на глазах у одного поколения</h2>
+      <p class="lead">В 1960 году Аральское море было четвёртым по величине озером в мире. Сегодня на его месте пустыня Аралкум. Это одна из самых тяжёлых экологических катастроф XX века, и она случилась здесь, у нас.</p>
+    </div>
+    <div class="aral-grid">
+      <div>
+        <div class="cells" id="cells" role="img" aria-label="Из 100 квадратиков моря синими осталось около 10"></div>
+        <div class="cells-cap"><span><b style="background:var(--water)"></b>осталось воды</span><span><b style="background:var(--sand)"></b>стало пустыней</span></div>
+        <p style="margin-top:10px;font-size:15px;color:var(--muted)">Схема: если море 1960 года разделить на 100 частей, сегодня водой покрыта примерно десятая часть.</p>
+      </div>
+      <ol class="years">
+        <li><b>1960</b><span>Площадь около 68 000 км². В Муйнаке работает рыбный порт, море кормит тысячи семей.</span></li>
+        <li><b>1960–80</b><span>Воду рек Амударьи и Сырдарьи забирают на поля хлопка. До моря она почти перестаёт доходить.</span></li>
+        <li><b>1990-е</b><span>Море распадается на Малый Арал на севере и Большой на юге. Вода становится всё солонее, рыба гибнет.</span></li>
+        <li class="hope"><b>2005</b><span>В Казахстане построили плотину Кокарал. Малый Арал начал наполняться, туда вернулась рыба.</span></li>
+        <li><b>2014</b><span>Восточная часть Большого Арала впервые высохла полностью. Это видно на снимках из космоса.</span></li>
+        <li class="hope"><b>2021</b><span>ООН объявила Приаралье зоной экологических инноваций и технологий. На высохшем дне сажают саксаул, чтобы удержать песок и соль.</span></li>
+      </ol>
+    </div>
+    <div class="stats3">
+      <div><span class="stat-big">~6 млн га</span><p>Площадь высохшего дна. Это больше, чем вся Ферганская долина.</p></div>
+      <div><span class="stat-big">100+ км</span><p>Столько теперь от бывшего порта Муйнак до воды. На песке стоят ржавые корабли.</p></div>
+      <div><span class="stat-big">Соль и пыль</span><p>Ветер поднимает с дна соль и остатки удобрений и разносит их на сотни километров. Врачи в Каракалпакстане отмечают больше болезней дыхания у детей.</p></div>
+    </div>
+    <div class="aral-do">
+      <div><h3>Беречь воду</h3><p>Узбекистан живёт в условиях нехватки воды. Каждый закрытый кран и починенный подтекающий бачок помогают рекам.</p></div>
+      <div><h3>Сажать деревья</h3><p>В стране идёт программа «Яшил макон» («Зелёное пространство»). Посадите дерево вместе с ребёнком у дома или школы.</p></div>
+      <div><h3>Показать своими глазами</h3><p>В Муйнаке есть музей и «кладбище кораблей». Такая поездка расскажет ребёнку об Арале лучше любых слов. Можно начать с фотографий «до и после».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- AIR -->
+<section id="air">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Воздух, которым дышит ребёнок</p>
+      <h2>Ташкент регулярно попадает в списки самых грязных городов мира</h2>
+      <p class="lead">Самое опасное в воздухе — мелкая пыль PM2.5. Эти частицы примерно в 30 раз тоньше волоса, их не видно, но они проникают глубоко в лёгкие и даже в кровь. Детям они вредят сильнее, чем взрослым: дети дышат чаще и проводят много времени на улице.</p>
+    </div>
+    <div class="air-top">
+      <div style="display:grid;gap:12px">
+        <span class="stat-big" style="font-size:clamp(56px,9vw,104px)">×8</span>
+        <p style="font-size:19px">Во столько раз среднегодовое загрязнение воздуха в Ташкенте выше рекомендации Всемирной организации здравоохранения.</p>
+        <p style="font-size:15px;color:var(--muted)">По оценке Всемирного банка (2024), 83% жителей Ташкента живут в зонах с высоким загрязнением воздуха.</p>
+      </div>
+      <div class="pm" role="img" aria-label="Сравнение: норма ВОЗ 5, Ташкент 38,8 микрограмма PM2.5 на кубометр">
+        <p style="font-weight:700">Мелкая пыль PM2.5 в среднем за год, мкг/м³</p>
+        <div class="pm-row"><span>Норма ВОЗ</span><div class="pm-bar" style="width:12.9%;background:var(--moss);min-width:56px">5</div></div>
+        <div class="pm-row"><span>Ташкент</span><div class="pm-bar" style="width:100%;background:var(--rowan)">38,8</div></div>
+        <p style="font-size:13.5px;color:var(--muted)">Источник: Всемирный банк, оценка качества воздуха Ташкента, 2024. Зимой, в сезон отопления, бывает намного хуже.</p>
+      </div>
+    </div>
+    <div class="sources">
+      <div><b>Отопление</b><span>Котельные и печи на угле зимой</span></div>
+      <div><b>Машины</b><span>Старые автомобили и пробки</span></div>
+      <div><b>Стройки</b><span>Пыль от строительства и дорог</span></div>
+      <div><b>Костры</b><span>Сжигание листьев и мусора во дворах</span></div>
+      <div><b>Пыльные бури</b><span>Пыль и соль из пустынь, в том числе с дна Арала</span></div>
+    </div>
+
+    <div class="aqi-box">
+      <div style="display:grid;gap:8px">
+        <h3 style="font-size:24px">Проверьте воздух в своём районе перед прогулкой</h3>
+        <p style="color:var(--muted);font-size:16.5px">Индекс качества воздуха (AQI) показывают приложения и сайты мониторинга. Нажмите на уровень, чтобы узнать, что делать с ребёнком.</p>
+        <div class="check-links">
+          <a href="https://www.iqair.com/uzbekistan" target="_blank" rel="noopener">IQAir: карта Узбекистана</a>
+          <a href="https://aqicn.org/map/uzbekistan/" target="_blank" rel="noopener">AQICN: карта датчиков</a>
+          <a href="https://hydromet.uz" target="_blank" rel="noopener">Узгидромет</a>
+        </div>
+      </div>
+      <div class="aqi-scale" id="aqiScale"></div>
+      <div class="aqi-out" id="aqiOut"></div>
+    </div>
+
+    <div class="two">
+      <div class="col">
+        <h3>Как защитить себя и ребёнка</h3>
+        <ul>
+          <li>Смотрите AQI утром. В грязные дни гуляйте меньше, без бега и активных игр.</li>
+          <li>Проветривайте, когда воздух чище: после дождя, при ветре. В смог держите окна закрытыми.</li>
+          <li>Делайте влажную уборку чаще, пыль оседает на полу и подоконниках.</li>
+          <li>Очиститель воздуха с HEPA-фильтром в детской заметно снижает мелкую пыль.</li>
+          <li>Для улицы в сильный смог подходит плотная маска класса FFP2 или N95 по размеру ребёнка. Обычная тканевая маска от PM2.5 почти не защищает.</li>
+          <li>Если у ребёнка кашель, астма или аллергия, обсудите с педиатром план на дни смога.</li>
+        </ul>
+        <p class="note" style="margin-top:6px"><b>Важно для наших детей:</b><span>Маска закрывает губы, и читать по ним становится невозможно. В маске переходите на жесты, дактиль или пишите в телефоне. Есть маски с прозрачным окошком.</span></p>
+      </div>
+      <div class="col do">
+        <h3>Как сделать воздух чище</h3>
+        <ul>
+          <li>Никогда не сжигайте листья и мусор. Дым от костра во дворе ядовит, особенно от пластика.</li>
+          <li>Не оставляйте машину работать на месте, пока ждёте. Чаще ходите пешком или ездите на метро.</li>
+          <li>Следите за машиной: исправный двигатель и фильтры дают меньше выхлопа.</li>
+          <li>Сажайте деревья и берегите те, что растут. Зелень задерживает пыль и даёт тень.</li>
+          <li>Сообщайте в хокимият или махаллинский комитет, если рядом жгут мусор.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -501,6 +689,48 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   </div>
 </section>
 
+
+<!-- ADULTS -->
+<section id="adults">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Пример взрослых</p>
+      <h2>Ребёнок не слышит наставлений, но видит всё, что мы делаем</h2>
+      <p class="lead">Детям, которые воспринимают мир глазами, пример взрослых особенно заметен. Брошенная на землю обёртка, сигарета у подъезда, бутылка на празднике — всё это ребёнок запоминает как норму. Хорошая новость в том, что так же он запоминает и хорошее.</p>
+    </div>
+    <div class="mirror">
+      <span class="stat-big">1 шаг</span>
+      <p>Увидели мусор на дорожке — поднимите и донесите до урны. Без слов, просто сделайте. Ребёнок повторит это лучше, чем после любого объяснения.</p>
+    </div>
+    <div class="adults">
+      <article class="ad">
+        <span class="k">Мусор</span>
+        <h3>Не мусорить. Совсем, даже «чуть-чуть»</h3>
+        <p>Фантик из окна машины, семечки на скамейке, пакет у арыка. Мусор забивает арыки, оттуда попадает в реки и на поля. Пластик в природе не исчезает сотни лет.</p>
+        <p class="try"><b>Попробуйте:</b> носите в сумке маленький пакет для своего мусора. Ребёнку дайте свой.</p>
+      </article>
+      <article class="ad">
+        <span class="k">Окурки</span>
+        <h3>Окурок — самый частый мусор в мире</h3>
+        <p>На уборках пляжей и парков окурков находят больше, чем любых других вещей. Фильтр сделан из пластика и годами отдаёт в землю и воду никотин и тяжёлые металлы.</p>
+        <p class="try"><b>Попробуйте:</b> если курите, окурок только в урну. И никогда на глазах у ребёнка.</p>
+      </article>
+      <article class="ad">
+        <span class="k">Курение</span>
+        <h3>Безопасного пассивного курения не бывает</h3>
+        <p>По данным ВОЗ, табачный дым вреден в любом количестве. Дети курящих родителей чаще болеют бронхитом, астмой и отитом, а отит особенно опасен для детей со сниженным слухом. Электронные сигареты тоже загрязняют воздух в комнате, а их батарейки становятся опасным мусором.</p>
+        <p class="try"><b>Попробуйте:</b> правило «дом и машина без дыма». А если давно хотите бросить, лучший момент — сейчас. Терапевт подскажет, как это сделать легче.</p>
+      </article>
+      <article class="ad">
+        <span class="k">Праздники</span>
+        <h3>Праздник без алкоголя и без мусора</h3>
+        <p>Дети копируют то, как взрослые отдыхают. Пикник, после которого на траве остаются бутылки, учит ребёнку тому, что природа — это место, где можно всё.</p>
+        <p class="try"><b>Попробуйте:</b> семейный пикник с правилом «уходим, а поляна чище, чем была». Сделайте фото до и после.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- CHALLENGE -->
 <section id="challenge" class="band">
   <div class="wrap">
@@ -599,8 +829,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
         <h3>Где искать помощь</h3>
         <ul>
           <li>Сурдопедагог школы подскажет жесты для новых слов и поможет связать домашние занятия со школьными.</li>
-          <li>Пункты приёма вторсырья в вашем городе легко найти на онлайн-картах по запросу «приём вторсырья» или «приём батареек».</li>
-          <li>Экологические праздники в календаре: 22 марта День воды, 1 апреля День птиц, 22 апреля День Земли, 5 июня День окружающей среды.</li>
+          <li>Пункты приёма вторсырья и батареек в вашем городе легко найти на онлайн-картах по запросу «приём вторсырья».</li>
+          <li>Качество воздуха: приложения IQAir и AQICN, сайт Узгидромета.</li>
+          <li>Экологические праздники в календаре: 22 марта День воды, 22 апреля День Земли, 5 июня День окружающей среды. Хороший повод для общего дела.</li>
           <li>Посмотрите сайт для детей, который сделан в пару к этому: там те же темы рассказаны для ребят.</li>
         </ul>
       </div>
@@ -725,9 +956,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
     ["Прогулка-наблюдение в парке","найти 5 разных листьев"],
     ["Нарисовать природу у дома","и повесить рисунок"],
     ["Починить вещь, а не выбросить","игрушку, одежду, книгу"],
-    ["Носить свою бутылку для воды","вместо покупной"],
+    ["Проверять воздух перед прогулкой","по приложению AQI"],
     ["Собрать мусор во дворе","в перчатках, вместе со взрослым"],
-    ["Сфотографировать одно дерево","начать фото-дневник"],
+    ["Посадить дерево","вместе с ребёнком, «Яшил макон»"],
     ["Отдать ненужные вещи","тем, кому они пригодятся"]
   ];
   var KEY="eco-parents-tasks-v1", state=[];
@@ -787,6 +1018,31 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
     row.innerHTML='<b>'+r[0]+' дБ</b><div class="db-cell"><span>'+r[1]+'</span><div class="db-bar" style="width:'+(r[0]/120*100)+'%;background:'+r[2]+'"></div></div>';
     dbEl.appendChild(row);
   });
+
+  /* ---------- Aral cells ---------- */
+  var cells=$("cells"); for(var c=0;c<100;c++){var i=document.createElement("i"); if([0,1,10,11,12,20,21,30,88,89].indexOf(c)>-1)i.className="w"; cells.appendChild(i)}
+
+  /* ---------- AQI ---------- */
+  var AQI=[
+    {r:"0–50",n:"Хорошо",c:"#7BC96F",t:"Отличный день для прогулки",a:["Гуляйте сколько хотите, играйте активно.","Проветрите квартиру как следует."]},
+    {r:"51–100",n:"Умеренно",c:"#E8D44D",t:"Можно гулять, но следите за самочувствием",a:["Обычная прогулка в порядке.","Детям с астмой лучше избегать долгого бега."]},
+    {r:"101–150",n:"Вредно детям",c:"#F2A541",t:"Детям — меньше на улице",a:["Сократите прогулку, без активных игр.","Гуляйте подальше от больших дорог.","Окна держите закрытыми, включите очиститель."]},
+    {r:"151–200",n:"Вредно",c:"#E8603C",t:"Лучше остаться дома",a:["Отмените долгие прогулки и спорт на улице.","Если нужно выйти — плотная маска FFP2/N95.","Влажная уборка и очиститель воздуха дома."]},
+    {r:"201–300",n:"Очень вредно",c:"#A45EB5",t:"Дома, окна закрыты",a:["Всё время в помещении.","Очиститель воздуха в комнате, где спит ребёнок.","При кашле и одышке — к врачу."]},
+    {r:"300+",n:"Опасно",c:"#7E2A3A",t:"Чрезвычайная ситуация",a:["Не выходите без крайней необходимости.","Следите за сообщениями Узгидромета и МЧС.","Сразу обращайтесь к врачу при плохом самочувствии."]}
+  ];
+  var sc=$("aqiScale"), out=$("aqiOut"), btns=[];
+  function pick(k){
+    btns.forEach(function(b,j){b.setAttribute("aria-pressed",j===k)});
+    var a=AQI[k];
+    out.innerHTML='<div style="display:grid;gap:8px"><span class="aqi-face">AQI '+a.r+' · '+a.n+'</span><h3 style="color:'+(k>3?'var(--rowan)':'var(--ink)')+'">'+a.t+'</h3></div><ul>'+a.a.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  }
+  AQI.forEach(function(a,k){
+    var b=document.createElement("button"); b.type="button"; b.className="aqi-btn"; b.style.background=a.c; if(k>3)b.style.color="#fff";
+    b.innerHTML='<b>'+a.r+'</b><small>'+a.n+'</small>'; b.addEventListener("click",function(){pick(k)});
+    sc.appendChild(b); btns.push(b);
+  });
+  pick(2);
 })();
 </script>
 
