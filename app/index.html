@@ -1,0 +1,572 @@
+<title>Просто о сложном</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: a working tool. Toolbar of access settings on top, then "source text" and "simple card" side by side (stacked on phones). */
+:root {
+  --paper: #f6f8f8;
+  --sheet: #ffffff;
+  --ink: #142326;
+  --muted: #4b5f63;
+  --line: #d3dedf;
+  --accent: #0b6470;
+  --accent-ink: #ffffff;
+  --accent-soft: #e1f0f1;
+  --danger: #b3261e;
+  --danger-soft: #fbe9e7;
+  --warn: #8a5a00;
+  --warn-soft: #fff3d6;
+  --ok: #1e6b3a;
+  --ok-soft: #e4f3e9;
+  --focus: #f0b400;
+  --f-body: "Golos Text", "Segoe UI", Arial, sans-serif;
+  --f-head: "Unbounded", "Golos Text", "Segoe UI", Arial, sans-serif;
+  --scale: 1;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1719; --sheet: #172225; --ink: #eef5f5; --muted: #a9bcbf; --line: #2c3c40;
+    --accent: #5cc6d2; --accent-ink: #062226; --accent-soft: #163a3f;
+    --danger: #ff8a80; --danger-soft: #3a1c1a; --warn: #ffc95c; --warn-soft: #3a2e12;
+    --ok: #7fd69c; --ok-soft: #173123; --focus: #ffd23f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1719; --sheet: #172225; --ink: #eef5f5; --muted: #a9bcbf; --line: #2c3c40;
+  --accent: #5cc6d2; --accent-ink: #062226; --accent-soft: #163a3f;
+  --danger: #ff8a80; --danger-soft: #3a1c1a; --warn: #ffc95c; --warn-soft: #3a2e12;
+  --ok: #7fd69c; --ok-soft: #173123; --focus: #ffd23f; color-scheme: dark;
+}
+/* High-contrast mode: black on white or yellow on black, no soft fills */
+:root.hc { --paper:#ffffff; --sheet:#ffffff; --ink:#000000; --muted:#000000; --line:#000000;
+  --accent:#000000; --accent-ink:#ffffff; --accent-soft:#ffffff; --danger:#000000; --danger-soft:#ffffff;
+  --warn:#000000; --warn-soft:#ffffff; --ok:#000000; --ok-soft:#ffffff; --focus:#0050ff; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root.hc:not([data-theme="light"]) { --paper:#000; --sheet:#000; --ink:#ffef00; --muted:#ffef00; --line:#ffef00;
+  --accent:#ffef00; --accent-ink:#000; --accent-soft:#000; --danger:#ffef00; --danger-soft:#000; --warn:#ffef00; --warn-soft:#000; --ok:#ffef00; --ok-soft:#000; --focus:#00e5ff; color-scheme: dark; } }
+:root.hc[data-theme="dark"] { --paper:#000; --sheet:#000; --ink:#ffef00; --muted:#ffef00; --line:#ffef00;
+  --accent:#ffef00; --accent-ink:#000; --accent-soft:#000; --danger:#ffef00; --danger-soft:#000; --warn:#ffef00; --warn-soft:#000; --ok:#ffef00; --ok-soft:#000; --focus:#00e5ff; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { font-size: calc(17px * var(--scale)); }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 1rem; line-height: 1.6; }
+:root.hc .card, :root.hc .panel, :root.hc .sec { border-width: 2px !important; }
+:root.spaced body { letter-spacing: .04em; word-spacing: .16em; line-height: 1.9; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 48px; display: grid; gap: 20px; }
+
+header.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand svg { flex: none; }
+.brand h1 { font-family: var(--f-head); font-size: 1.35rem; font-weight: 700; margin: 0; line-height: 1.2; text-wrap: balance; }
+.brand p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+.access { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.access .grp { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--sheet); }
+.access .grp button { border: 0; border-radius: 0; background: transparent; }
+.access .grp button + button { border-left: 1px solid var(--line); }
+.access .grp button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+[hidden] { display: none !important; }
+
+button, .btn { font: inherit; font-weight: 600; color: var(--ink); background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: .5rem .85rem; min-height: 44px; cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; }
+button:hover { border-color: var(--accent); }
+button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-size: 1.05rem; padding: .7rem 1.2rem; }
+button:disabled { opacity: .55; cursor: wait; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+.panel { background: var(--sheet); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.panel h2 { font-family: var(--f-head); font-weight: 500; font-size: 1.05rem; margin: 0; }
+.step { display: inline-grid; place-items: center; width: 1.7em; height: 1.7em; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-family: var(--f-head); font-size: .85rem; margin-right: .4em; border: 1px solid var(--accent); }
+label.lbl { font-weight: 600; }
+textarea { width: 100%; min-height: 15rem; resize: vertical; font: inherit; font-size: .92rem; line-height: 1.55; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.hint { color: var(--muted); font-size: .88rem; margin: 0; }
+.photo-prev { display: flex; align-items: center; gap: 10px; }
+.photo-prev img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.status { min-height: 1.6em; font-weight: 600; color: var(--accent); margin: 0; }
+.status.err { color: var(--danger); }
+
+.result-head { display: grid; gap: 6px; }
+.tag { justify-self: start; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); background: var(--warn-soft); border-radius: 6px; padding: 2px 8px; }
+.result-head h3 { font-family: var(--f-head); font-weight: 700; font-size: 1.5rem; line-height: 1.25; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.oneline { font-size: 1.2rem; font-weight: 500; margin: 0; }
+
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.secs { display: grid; gap: 12px; }
+.sec { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 14px; padding: 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--sheet); }
+.sec .ic { grid-row: span 2; width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.sec h4 { margin: 0; font-size: 1.1rem; line-height: 1.3; align-self: center; }
+.sec ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.sec.danger { background: var(--danger-soft); border-color: var(--danger); }
+.sec.danger .ic { background: var(--danger); color: var(--danger-soft); }
+.sec.danger h4 { color: var(--danger); }
+.sec.no .ic { background: var(--warn-soft); color: var(--warn); }
+.sec.how .ic { background: var(--ok-soft); color: var(--ok); }
+.quote { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 10px 10px 0; margin: 0; }
+.quote b { display: block; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+.easy { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.easy li { font-size: 1.3rem; line-height: 1.45; padding: 12px 16px; border-radius: 12px; background: var(--accent-soft); }
+
+.signbox { display: grid; gap: 14px; }
+.signcard { min-height: 12rem; display: grid; place-items: center; text-align: center; padding: 24px; border-radius: 16px; border: 2px solid var(--accent); background: var(--sheet); }
+.signcard p { margin: 0; font-family: var(--f-head); font-weight: 700; font-size: 1.9rem; line-height: 1.3; text-wrap: balance; overflow-wrap: anywhere; }
+.signnav { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.counter { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+.video-note { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 12px; align-items: start; padding: 12px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: .92rem; }
+
+.words { margin: 0; display: grid; gap: 10px; }
+.words div { padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; }
+.words dt { font-weight: 700; }
+.words dd { margin: 0; color: var(--muted); }
+
+.ask { display: grid; gap: 10px; border-top: 2px solid var(--line); padding-top: 16px; }
+.ask input { flex: 1 1 14rem; min-width: 0; min-height: 44px; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: .5rem .8rem; }
+.answer { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--accent-soft); white-space: pre-wrap; }
+
+.disclaimer { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--warn-soft); color: var(--ink); font-size: .92rem; border: 1px solid var(--warn); }
+.disclaimer svg { flex: none; color: var(--warn); margin-top: 2px; }
+.empty { color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .signcard p { animation: pop .25s ease-out; } @keyframes pop { from { transform: scale(.96); opacity: .4 } to { transform: none; opacity: 1 } } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="1" y="1" width="42" height="42" rx="12" fill="var(--accent)"/><path d="M12 15h20M12 22h14M12 29h8" stroke="var(--accent-ink)" stroke-width="3.2" stroke-linecap="round"/><circle cx="31" cy="29" r="4" fill="var(--accent-ink)"/></svg>
+      <div>
+        <h1>Просто о сложном</h1>
+        <p>Сложный текст — коротко и понятно</p>
+      </div>
+    </div>
+    <div class="access" role="toolbar" aria-label="Настройки удобства">
+      <div class="grp" role="group" aria-label="Размер текста">
+        <button id="fs1" data-scale="1" aria-pressed="true" title="Обычный текст">А</button>
+        <button id="fs2" data-scale="1.2" aria-pressed="false" title="Крупный текст" style="font-size:1.15em">А</button>
+        <button id="fs3" data-scale="1.45" aria-pressed="false" title="Очень крупный текст" style="font-size:1.35em">А</button>
+      </div>
+      <button id="hcBtn" aria-pressed="false">Контраст</button>
+      <button id="spBtn" aria-pressed="false">Шире буквы</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="panel" aria-labelledby="inTitle">
+      <h2 id="inTitle"><span class="step">1</span>Вставьте текст или фото</h2>
+      <label class="lbl" for="src">Текст инструкции, письма или документа</label>
+      <textarea id="src" spellcheck="false"></textarea>
+      <div class="row">
+        <label class="btn" for="photo" id="photoLbl" hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          Добавить фото
+        </label>
+        <input type="file" id="photo" accept="image/*">
+        <button id="clearBtn" type="button">Очистить</button>
+      </div>
+      <div class="photo-prev" id="photoPrev" hidden><img id="photoImg" alt="Выбранное фото"><span id="photoName"></span><button id="photoDel" type="button">Убрать фото</button></div>
+      <button class="primary" id="goBtn" type="button">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h12M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Сделать понятно
+      </button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <p class="hint" id="aiHint">Сейчас показан пример. Вставьте свой текст и нажмите «Сделать понятно».</p>
+    </section>
+
+    <section class="panel" aria-labelledby="outTitle">
+      <h2 id="outTitle"><span class="step">2</span>Понятная версия</h2>
+      <div class="result-head">
+        <span class="tag" id="exampleTag">Пример</span>
+        <h3 id="rName"></h3>
+        <p class="oneline" id="rOne"></p>
+      </div>
+      <div class="row">
+        <button id="speakBtn" type="button" hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="speakLbl">Прочитать вслух</span>
+        </button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Как показать">
+        <button role="tab" id="t-short" aria-selected="true" aria-controls="p-short">Кратко</button>
+        <button role="tab" id="t-easy" aria-selected="false" aria-controls="p-easy">Очень просто</button>
+        <button role="tab" id="t-sign" aria-selected="false" aria-controls="p-sign">По одной фразе</button>
+        <button role="tab" id="t-words" aria-selected="false" aria-controls="p-words">Сложные слова</button>
+      </div>
+
+      <div role="tabpanel" id="p-short" aria-labelledby="t-short">
+        <div class="secs" id="secs"></div>
+      </div>
+      <div role="tabpanel" id="p-easy" aria-labelledby="t-easy" hidden>
+        <ul class="easy" id="easyList"></ul>
+      </div>
+      <div role="tabpanel" id="p-sign" aria-labelledby="t-sign" hidden>
+        <div class="signbox">
+          <p class="hint">Одна мысль на экране. Удобно для людей, которым трудно читать длинный текст, и для глухих.</p>
+          <div class="signcard" aria-live="polite"><p id="signText"></p></div>
+          <div class="signnav">
+            <button id="prevBtn" type="button">← Назад</button>
+            <span class="counter" id="signCount"></span>
+            <button id="nextBtn" type="button">Дальше →</button>
+          </div>
+          <div class="video-note">
+            <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="2" y="8" width="30" height="28" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M32 18l10-6v20l-10-6z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+            <span>Видео на русском жестовом языке — следующий этап. Мы хотим записать живого сурдопереводчика для главных фраз, а не показывать неестественного робота.</span>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" id="p-words" aria-labelledby="t-words" hidden>
+        <dl class="words" id="wordList"></dl>
+      </div>
+
+      <div class="ask" id="askBox" hidden>
+        <label class="lbl" for="q">Остался вопрос? Спросите про этот текст</label>
+        <div class="row">
+          <input id="q" type="text" placeholder="Например: можно ли пить при беременности?">
+          <button id="askBtn" type="button">Спросить</button>
+        </div>
+        <p class="answer" id="answer" hidden></p>
+      </div>
+
+      <div class="disclaimer">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l10 18H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <span>Это помощник, а не врач. Упрощённый текст может содержать ошибки. Дозировку всегда сверяйте с оригиналом инструкции. Если сомневаетесь — спросите врача или фармацевта.</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+
+  /* ---------- Example shown on load ---------- */
+  const EXAMPLE_SRC = `ПАРАЦЕТАМОЛ, таблетки 500 мг
+Фармакотерапевтическая группа: анальгезирующее ненаркотическое средство.
+Показания к применению: болевой синдром слабой и умеренной интенсивности (головная боль, зубная боль, мигрень, невралгия, миалгия, альгодисменорея); лихорадочный синдром при инфекционно-воспалительных заболеваниях.
+Противопоказания: повышенная чувствительность к компонентам препарата; выраженная печёночная и/или почечная недостаточность; детский возраст до 6 лет.
+С осторожностью: доброкачественные гипербилирубинемии, хронический алкоголизм, пожилой возраст, беременность и период лактации.
+Способ применения и дозы: внутрь, после еды, запивая большим количеством жидкости. Взрослым и детям старше 12 лет (с массой тела более 40 кг): по 500–1000 мг до 4 раз в сутки. Интервал между приёмами — не менее 4 часов. Максимальная суточная доза — 4 г. Продолжительность лечения без консультации врача — не более 5 дней при обезболивании и 3 дней в качестве жаропонижающего средства.
+Побочное действие: аллергические реакции (кожная сыпь, зуд, крапивница), тошнота, боль в эпигастрии; при длительном применении в высоких дозах — гепатотоксическое действие.
+Передозировка: бледность кожных покровов, анорексия, тошнота, рвота; гепатонекроз. Необходимо немедленно обратиться за медицинской помощью.
+Взаимодействие: не применять одновременно с другими парацетамолсодержащими препаратами. Этанол повышает риск гепатотоксического действия.
+Хранить при температуре не выше 25 °C в недоступном для детей месте.`;
+
+  const EXAMPLE = {
+    name: "Парацетамол, таблетки 500 мг",
+    one_line: "Лекарство от боли и от высокой температуры.",
+    dose_quote: "Взрослым и детям старше 12 лет (с массой тела более 40 кг): по 500–1000 мг до 4 раз в сутки. Интервал между приёмами — не менее 4 часов. Максимальная суточная доза — 4 г.",
+    sections: [
+      { id: "for", title: "Для чего", items: ["Снимает головную, зубную, мышечную боль.", "Снимает боль при месячных.", "Сбивает высокую температуру."] },
+      { id: "how", title: "Как принимать", items: ["Взрослым: 1–2 таблетки за раз.", "Не чаще 4 раз в день.", "Между приёмами — минимум 4 часа.", "Пить после еды, запивать водой.", "Больше 8 таблеток в день — нельзя."] },
+      { id: "no", title: "Кому нельзя", items: ["Детям младше 6 лет.", "Если тяжело больна печень или почки.", "Если раньше была аллергия на парацетамол."] },
+      { id: "mix", title: "Не сочетать", items: ["С алкоголем — вредно для печени.", "С другими лекарствами, где есть парацетамол (например, порошки от простуды)."] },
+      { id: "side", title: "Может быть", items: ["Сыпь или зуд на коже.", "Тошнота, боль в животе."] },
+      { id: "danger", title: "Срочно к врачу", items: ["Если выпили слишком много таблеток — даже если чувствуете себя нормально.", "Если сильная тошнота, рвота, бледность."] },
+      { id: "time", title: "Сколько дней", items: ["От боли — не дольше 5 дней.", "От температуры — не дольше 3 дней.", "Дальше — только с врачом."] },
+      { id: "store", title: "Хранение", items: ["Не теплее 25 градусов.", "Прятать от детей."] }
+    ],
+    easy: [
+      "Это таблетки от боли.",
+      "Ещё они сбивают температуру.",
+      "Взрослым: одна или две таблетки.",
+      "Потом ждать 4 часа.",
+      "В день — не больше 8 таблеток.",
+      "Нельзя пить с алкоголем.",
+      "Выпили много — сразу к врачу."
+    ],
+    words: [
+      { word: "Анальгезирующее", meaning: "Обезболивающее — убирает боль." },
+      { word: "Лихорадочный синдром", meaning: "Высокая температура, жар." },
+      { word: "Печёночная недостаточность", meaning: "Печень сильно больна и плохо работает." },
+      { word: "Гепатотоксическое действие", meaning: "Вредит печени." },
+      { word: "Период лактации", meaning: "Время, когда мама кормит ребёнка грудью." },
+      { word: "Альгодисменорея", meaning: "Боль во время месячных." }
+    ]
+  };
+
+  /* ---------- Icons for each kind of section ---------- */
+  const ICON = {
+    for: '<path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+    how: '<rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+    time: '<path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    no: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M6 6l12 12" stroke="currentColor" stroke-width="2.4"/>',
+    mix: '<rect x="3" y="9" width="8" height="6" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="13" y="9" width="8" height="6" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4 20L20 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>',
+    side: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8.5 16c1-1.3 2.2-2 3.5-2s2.5.7 3.5 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="10" r="1.3" fill="currentColor"/><circle cx="15" cy="10" r="1.3" fill="currentColor"/>',
+    danger: '<path d="M12 3l10 18H2z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M12 10v5M12 18v.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+    store: '<path d="M4 9l8-5 8 5v11H4z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 20v-6h6v6" fill="none" stroke="currentColor" stroke-width="2.2"/>',
+    other: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>'
+  };
+  const ORDER = ["for", "how", "time", "no", "mix", "side", "danger", "store", "other"];
+
+  let current = EXAMPLE;
+  let currentSrc = EXAMPLE_SRC;
+  let signIdx = 0;
+
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function render(r, isExample) {
+    current = r;
+    $("exampleTag").hidden = !isExample;
+    $("rName").textContent = r.name || "Без названия";
+    $("rOne").textContent = r.one_line || "";
+
+    const secs = $("secs"); secs.replaceChildren();
+    const list = (r.sections || []).filter(s => s && s.items && s.items.length)
+      .sort((a, b) => (ORDER.indexOf(a.id) + 99) % 99 - (ORDER.indexOf(b.id) + 99) % 99);
+    for (const s of list) {
+      const id = ICON[s.id] ? s.id : "other";
+      const box = el("div", "sec " + id);
+      const ic = el("div", "ic"); ic.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">' + ICON[id] + "</svg>";
+      const h = el("h4", null, s.title);
+      const ul = el("ul"); for (const it of s.items) ul.append(el("li", null, it));
+      box.append(ic, h, ul); secs.append(box);
+    }
+    if (r.dose_quote) {
+      const q = el("blockquote", "quote"); q.append(el("b", null, "Дозировка дословно из оригинала"), document.createTextNode(r.dose_quote));
+      secs.append(q);
+    }
+    if (!list.length && !r.dose_quote) secs.append(el("p", "empty", "Не получилось выделить главное. Попробуйте вставить текст целиком."));
+
+    const easy = $("easyList"); easy.replaceChildren();
+    for (const t of r.easy || []) easy.append(el("li", null, t));
+
+    const words = $("wordList"); words.replaceChildren();
+    for (const w of r.words || []) { const d = el("div"); d.append(el("dt", null, w.word), el("dd", null, w.meaning)); words.append(d); }
+    if (!(r.words || []).length) words.append(el("p", "empty", "Сложных слов не нашлось."));
+
+    signIdx = 0; renderSign();
+    $("answer").hidden = true;
+  }
+
+  function signPhrases() { return (current.easy && current.easy.length) ? current.easy : [current.one_line || ""]; }
+  function renderSign() {
+    const p = signPhrases();
+    $("signText").textContent = p[signIdx] || "";
+    $("signCount").textContent = (signIdx + 1) + " из " + p.length;
+    $("prevBtn").disabled = signIdx === 0;
+    $("nextBtn").disabled = signIdx >= p.length - 1;
+  }
+  $("prevBtn").onclick = () => { if (signIdx > 0) { signIdx--; renderSign(); } };
+  $("nextBtn").onclick = () => { if (signIdx < signPhrases().length - 1) { signIdx++; renderSign(); } };
+
+  /* ---------- Tabs ---------- */
+  const tabs = ["short", "easy", "sign", "words"];
+  function selectTab(name) {
+    for (const t of tabs) {
+      $("t-" + t).setAttribute("aria-selected", String(t === name));
+      $("p-" + t).hidden = t !== name;
+    }
+    store.set("tab", name);
+  }
+  tabs.forEach((t, i) => {
+    const b = $("t-" + t);
+    b.onclick = () => selectTab(t);
+    b.onkeydown = (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        selectTab(n); $("t-" + n).focus();
+      }
+    };
+  });
+
+  /* ---------- Accessibility settings ---------- */
+  const root = document.documentElement;
+  function setScale(v) {
+    root.style.setProperty("--scale", v);
+    ["fs1", "fs2", "fs3"].forEach(id => $(id).setAttribute("aria-pressed", String($(id).dataset.scale === v)));
+    store.set("scale", v);
+  }
+  ["fs1", "fs2", "fs3"].forEach(id => $(id).onclick = () => setScale($(id).dataset.scale));
+  function toggleClass(btnId, cls, key) {
+    const on = !root.classList.contains(cls);
+    root.classList.toggle(cls, on); $(btnId).setAttribute("aria-pressed", String(on)); store.set(key, on ? "1" : "0");
+  }
+  $("hcBtn").onclick = () => toggleClass("hcBtn", "hc", "hc");
+  $("spBtn").onclick = () => toggleClass("spBtn", "spaced", "sp");
+  if (store.get("scale")) setScale(store.get("scale"));
+  if (store.get("hc") === "1") { root.classList.add("hc"); $("hcBtn").setAttribute("aria-pressed", "true"); }
+  if (store.get("sp") === "1") { root.classList.add("spaced"); $("spBtn").setAttribute("aria-pressed", "true"); }
+  if (tabs.includes(store.get("tab"))) selectTab(store.get("tab"));
+
+  /* ---------- Initial state ---------- */
+  $("src").value = EXAMPLE_SRC;
+  render(EXAMPLE, true);
+  $("clearBtn").onclick = () => { $("src").value = ""; clearPhoto(); $("src").focus(); };
+
+  /* ---------- Photo ---------- */
+  let photoBlob = null;
+  function clearPhoto() { photoBlob = null; $("photo").value = ""; $("photoPrev").hidden = true; }
+  $("photoDel").onclick = clearPhoto;
+  $("photo").onchange = () => {
+    const f = $("photo").files && $("photo").files[0];
+    if (!f) return;
+    photoBlob = f;
+    $("photoImg").src = URL.createObjectURL(f);
+    $("photoName").textContent = f.name;
+    $("photoPrev").hidden = false;
+  };
+
+  /* ---------- Claude ---------- */
+  const status = (t, err) => { $("status").textContent = t; $("status").classList.toggle("err", !!err); };
+  const ERR = {
+    not_granted: "Вы не разрешили странице обращаться к Claude. Без этого упрощать текст не получится.",
+    rate_limited: "Слишком много запросов подряд. Подождите минуту и попробуйте снова.",
+    images_unavailable: "Здесь нельзя отправить фото. Перепечатайте текст вручную.",
+    image_rejected: "Фото не подошло. Попробуйте другое: чёткое, при хорошем свете.",
+    cancelled: "Остановлено."
+  };
+  const errText = (e) => ERR[e && e.code] || "Не получилось. Попробуйте ещё раз чуть позже.";
+
+  const PROMPT = (text, hasPhoto) => `Ты помогаешь людям, которым трудно читать и понимать сложные тексты: людям с нарушениями зрения, слуха (для многих глухих русский — второй язык), с когнитивными особенностями, с дислексией, пожилым.
+
+Задача: перепиши ${hasPhoto ? "текст с приложенного фото (и текст ниже, если он есть)" : "текст ниже"} простым и понятным русским языком.
+
+Правила:
+- Короткие предложения, до 10 слов. Одна мысль — одно предложение.
+- Без медицинских и юридических терминов. Если термин нужен — объясни его простыми словами.
+- Цифры пиши цифрами. Переводи миллиграммы в штуки таблеток, если это ясно из текста.
+- НИЧЕГО не выдумывай. Если в тексте нет информации для раздела — не добавляй раздел.
+- Дозировки и сроки — точно как в оригинале. В поле dose_quote скопируй дословно фразу о дозировке из оригинала (или "" если её нет).
+- Если это не инструкция к лекарству (письмо, договор, квитанция), используй подходящие разделы: for = о чём это, how = что нужно сделать, time = сроки, danger = что важно не пропустить, other = остальное.
+
+Верни ТОЛЬКО JSON без пояснений, по схеме:
+{
+ "name": "короткое название",
+ "one_line": "главное в одном простом предложении",
+ "dose_quote": "дословная цитата о дозировке или пустая строка",
+ "sections": [ {"id": "for|how|time|no|mix|side|danger|store|other", "title": "короткий заголовок по-русски", "items": ["пункт", "..."]} ],
+ "easy": ["5-8 самых важных фраз совсем простым языком, каждая до 7 слов, по порядку важности"],
+ "words": [ {"word": "сложное слово из оригинала", "meaning": "простое объяснение"} ]
+}
+
+Значения id: for — для чего; how — как принимать/что делать; time — сколько дней, сроки; no — кому нельзя; mix — с чем нельзя сочетать; side — побочные эффекты; danger — когда срочно к врачу или что опасно; store — хранение; other — прочее.
+
+ТЕКСТ:
+"""
+${text || "(текст на фото)"}
+"""`;
+
+  let sample = null, canPhoto = false;
+  (async () => {
+    if (!window.claude || !window.claude.use) { noClaude(); return; }
+    sample = await window.claude.use("sample");
+    if (!sample) { noClaude(); return; }
+    $("aiHint").textContent = "Сейчас показан пример. Вставьте свой текст или фото и нажмите «Сделать понятно».";
+    $("askBox").hidden = false;
+    const caps = await sample.limits().catch(() => null);
+    if (caps && caps.images) {
+      canPhoto = true;
+      $("photo").accept = caps.images.mediaTypes.join(",");
+      $("photoLbl").hidden = false;
+    }
+  })();
+  function noClaude() {
+    $("goBtn").disabled = true;
+    $("aiHint").textContent = "Упрощение работает, когда страница открыта в Claude. Здесь показан только пример.";
+  }
+
+  let busy = false;
+  $("goBtn").onclick = async () => {
+    if (!sample || busy) return;
+    const text = $("src").value.trim();
+    if (!text && !photoBlob) { status("Вставьте текст или добавьте фото.", true); $("src").focus(); return; }
+    busy = true; $("goBtn").disabled = true;
+    status("Читаю и упрощаю… Это может занять до минуты.");
+    try {
+      const opts = { modelTier: "default" };
+      if (photoBlob && canPhoto) opts.images = [photoBlob];
+      const raw = await sample.json(PROMPT(text, !!opts.images), opts);
+      if (!raw || typeof raw !== "object") throw { code: "bad" };
+      const r = {
+        name: String(raw.name || ""), one_line: String(raw.one_line || ""), dose_quote: String(raw.dose_quote || ""),
+        sections: Array.isArray(raw.sections) ? raw.sections.map(s => ({ id: String(s.id || "other"), title: String(s.title || ""), items: (Array.isArray(s.items) ? s.items : []).map(String) })) : [],
+        easy: (Array.isArray(raw.easy) ? raw.easy : []).map(String),
+        words: (Array.isArray(raw.words) ? raw.words : []).map(w => ({ word: String(w.word || ""), meaning: String(w.meaning || "") })).filter(w => w.word)
+      };
+      currentSrc = text || "(текст был на фото)";
+      render(r, false);
+      status("Готово.");
+      $("rName").setAttribute("tabindex", "-1"); $("rName").focus();
+    } catch (e) {
+      status(errText(e), true);
+    } finally {
+      busy = false; $("goBtn").disabled = false;
+    }
+  };
+
+  /* ---------- Questions ---------- */
+  let askCtl = null;
+  async function ask() {
+    const q = $("q").value.trim();
+    if (!sample || !q) return;
+    if (askCtl) askCtl.abort();
+    askCtl = new AbortController();
+    const out = $("answer"); out.hidden = false; out.textContent = "Думаю…";
+    $("askBtn").disabled = true;
+    try {
+      await sample(`Ответь на вопрос человека по этому тексту. Пиши очень просто: 2–4 коротких предложения, без терминов. Опирайся только на текст. Если в тексте нет ответа — так и скажи и посоветуй спросить врача или фармацевта. Не давай дозировок, которых нет в тексте.
+
+ТЕКСТ:
+"""
+${currentSrc}
+"""
+
+КРАТКО ИЗ ТЕКСТА: ${JSON.stringify(current)}
+
+ВОПРОС: ${q}`, { signal: askCtl.signal, modelTier: "default", onText: ({ text }) => { out.textContent = text; } });
+    } catch (e) {
+      if (e && e.code !== "cancelled") out.textContent = (e.text ? e.text + "\n\n" : "") + errText(e);
+    } finally { $("askBtn").disabled = false; }
+  }
+  $("askBtn").onclick = ask;
+  $("q").onkeydown = (e) => { if (e.key === "Enter") ask(); };
+
+  /* ---------- Reading aloud ---------- */
+  function speechText() {
+    const visible = tabs.find(t => !$("p-" + t).hidden);
+    const r = current;
+    if (visible === "easy" || visible === "sign") return [r.name, ...(r.easy || [])].join(". ");
+    if (visible === "words") return (r.words || []).map(w => w.word + " — " + w.meaning).join(". ");
+    const parts = [r.name, r.one_line];
+    for (const s of r.sections || []) parts.push(s.title + ": " + s.items.join(" "));
+    return parts.filter(Boolean).join(". ").slice(0, 1990);
+  }
+  let tts = null, speaking = false;
+  function setSpeaking(on) { speaking = on; $("speakLbl").textContent = on ? "Остановить" : "Прочитать вслух"; $("speakBtn").setAttribute("aria-pressed", String(on)); }
+  const synth = (() => { try { return window.speechSynthesis || null; } catch { return null; } })();
+  (async () => {
+    if (window.claude && window.claude.use) tts = await window.claude.use("tts");
+    if (tts) {
+      tts.onState(({ state }) => setSpeaking(state !== "idle"));
+      $("speakBtn").hidden = false;
+    } else if (synth) {
+      $("speakBtn").hidden = false;
+    }
+  })();
+  $("speakBtn").onclick = () => {
+    if (speaking) { if (tts) tts.stop(); else { synth.cancel(); setSpeaking(false); } return; }
+    const text = speechText();
+    if (tts) {
+      tts.speak(text, { language: "ru", rate: 0.9 }).catch(e => { if (e && e.code === "not_granted") $("speakBtn").hidden = true; });
+    } else if (synth) {
+      try {
+        const u = new SpeechSynthesisUtterance(text); u.lang = "ru-RU"; u.rate = 0.9;
+        u.onend = u.onerror = () => setSpeaking(false);
+        synth.cancel(); synth.speak(u); setSpeaking(true);
+      } catch { $("speakBtn").hidden = true; }
+    }
+  };
+})();
+</script>
