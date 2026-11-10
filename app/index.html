@@ -119,6 +119,10 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 
 .voice { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .voice label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: .9rem; }
+.rate { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; }
+.rate .grp button { font-size: 1.35rem; min-width: 52px; justify-content: center; }
+.rate .grp button:disabled { cursor: not-allowed; opacity: .4; }
+.rate output { align-self: center; min-width: 4.2em; padding: 0 .4rem; text-align: center; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
 
 .tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
 .tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -247,13 +251,14 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
           <span id="speakLbl" data-i18n="speak">Прочитать вслух</span>
         </button>
         <label><span data-i18n="voice">Голос</span> <select id="voiceSel"></select></label>
-        <label><span data-i18n="speed">Скорость</span>
-          <select id="rateSel">
-            <option value="0.8" data-i18n="slow">Медленно</option>
-            <option value="0.9" data-i18n="calm" selected>Спокойно</option>
-            <option value="1" data-i18n="normal">Обычно</option>
-          </select>
-        </label>
+        <div class="rate" role="group" data-i18n-aria="speed" aria-label="Скорость">
+          <span class="lbl" data-i18n="speed">Скорость</span>
+          <div class="grp">
+            <button id="slower" type="button" data-i18n-aria="slower" aria-label="Медленнее">−</button>
+            <output id="rateOut" aria-live="polite">90%</output>
+            <button id="faster" type="button" data-i18n-aria="faster" aria-label="Быстрее">+</button>
+          </div>
+        </div>
       </div>
       <div class="tabs" role="tablist">
         <button role="tab" id="t-short" aria-selected="true" aria-controls="p-short" data-i18n="tShort">Кратко</button>
@@ -331,7 +336,7 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
       hintNoClaude: "Упрощение работает, когда страница открыта в Claude. Здесь показан только пример.",
       step2: "Понятная версия", example: "Пример",
       speak: "Прочитать вслух", speakStop: "Остановить", voice: "Голос", speed: "Скорость",
-      slow: "Медленно", calm: "Спокойно", normal: "Обычно", voiceN: "Голос",
+      slower: "Медленнее", faster: "Быстрее", voiceN: "Голос",
       tShort: "Кратко", tEasy: "В картинках", tSign: "По одной фразе", tWords: "Сложные слова",
       signHint: "Одна мысль на экране, с картинкой. Удобно, если трудно читать длинный текст.",
       prev: "← Назад", next: "Дальше →",
@@ -360,7 +365,7 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
       hintNoClaude: "Soddalashtirish sahifa Claude ichida ochilganda ishlaydi. Bu yerda faqat namuna.",
       step2: "Tushunarli variant", example: "Namuna",
       speak: "Ovoz chiqarib oʻqish", speakStop: "Toʻxtatish", voice: "Ovoz", speed: "Tezlik",
-      slow: "Sekin", calm: "Xotirjam", normal: "Oddiy", voiceN: "Ovoz",
+      slower: "Sekinroq", faster: "Tezroq", voiceN: "Ovoz",
       tShort: "Qisqacha", tEasy: "Rasmlarda", tSign: "Bittadan ibora", tWords: "Qiyin soʻzlar",
       signHint: "Ekranda bitta fikr, rasm bilan. Uzun matnni oʻqish qiyin boʻlsa, qulay.",
       prev: "← Orqaga", next: "Keyingi →",
@@ -798,7 +803,7 @@ ${currentSrc}
 
   function sysVoices() {
     if (!synth) return [];
-    const want = outLang === "ru" ? "ru" : "uz";
+    const want = "ru";
     const all = synth.getVoices().filter(v => (v.lang || "").toLowerCase().startsWith(want));
     const score = (v) => (/natural|neural|online|enhanced|premium/i.test(v.name) ? 0 : 1) + (/google|microsoft|yandex|milena|svetlana|dariya/i.test(v.name) ? 0 : 1);
     return all.sort((a, b) => score(a) - score(b));
@@ -815,8 +820,17 @@ ${currentSrc}
     sel.closest("label").hidden = sel.options.length < 2;
   }
   $("voiceSel").onchange = () => store.set("voice", $("voiceSel").value);
-  if (store.get("rate")) $("rateSel").value = store.get("rate");
-  $("rateSel").onchange = () => { store.set("rate", $("rateSel").value); if (tts && speaking) tts.setRate(+$("rateSel").value); };
+  let rate = +(store.get("rate") || 0.9); if (!(rate >= 0.7 && rate <= 1.5)) rate = 0.9;
+  function setRate(v) {
+    rate = Math.round(Math.min(1.5, Math.max(0.7, v)) * 10) / 10;
+    $("rateOut").textContent = Math.round(rate * 100) + "%";
+    $("slower").disabled = rate <= 0.7; $("faster").disabled = rate >= 1.5;
+    store.set("rate", String(rate));
+    if (tts && speaking) tts.setRate(rate);
+  }
+  $("slower").onclick = () => setRate(rate - 0.1);
+  $("faster").onclick = () => setRate(rate + 0.1);
+  setRate(rate);
 
   // Short sentences with clear ends: the voice pauses on each one.
   function speechLines() {
@@ -833,9 +847,28 @@ ${currentSrc}
     }
     return lines;
   }
+  // Almost no voice speaks Uzbek well. A Russian voice reads Uzbek written in Cyrillic far more
+  // clearly than any voice reads Latin Uzbek, so Uzbek text is converted before it is spoken.
+  const UZ_PAIRS = [[/o[ʻ‘’'`]/g, "у"], [/O[ʻ‘’'`]/g, "У"], [/g[ʻ‘’'`]/g, "г"], [/G[ʻ‘’'`]/g, "Г"],
+    [/sh/g, "ш"], [/S[hH]/g, "Ш"], [/ch/g, "ч"], [/C[hH]/g, "Ч"], [/yo/g, "ё"], [/Yo/g, "Ё"],
+    [/yu/g, "ю"], [/Yu/g, "Ю"], [/ya/g, "я"], [/Ya/g, "Я"], [/ye/g, "е"], [/Ye/g, "Е"],
+    [/(^|[^A-Za-zА-Яа-яЁё])e/g, "$1э"], [/(^|[^A-Za-zА-Яа-яЁё])E/g, "$1Э"], [/[ʻ‘’'`ʼ]/g, ""]];
+  const UZ_CHARS = { a:"а",b:"б",c:"ц",d:"д",e:"е",f:"ф",g:"г",h:"х",i:"и",j:"ж",k:"к",l:"л",m:"м",n:"н",o:"о",p:"п",q:"к",r:"р",s:"с",t:"т",u:"у",v:"в",w:"в",x:"х",y:"й",z:"з",
+    ў:"у",қ:"к",ғ:"г",ҳ:"х",Ў:"У",Қ:"К",Ғ:"Г",Ҳ:"Х" };
+  function uzToRu(s) {
+    for (const [re, to] of UZ_PAIRS) s = s.replace(re, to);
+    return s.replace(/[a-zA-ZўқғҳЎҚҒҲ]/g, ch => { const lo = UZ_CHARS[ch.toLowerCase()] || UZ_CHARS[ch]; return ch === ch.toLowerCase() ? lo : lo.toUpperCase(); });
+  }
+  // Units and ranges a voice tends to misread.
+  function tidyForSpeech(s, ru) {
+    if (ru) s = s.replace(/(\d)\s*[–—-]\s*(\d)/g, "$1, $2");
+    return s.replace(/(\d)\s*мг(?![а-яё])/gi, "$1 миллиграмм").replace(/(\d)\s*мл(?![а-яё])/gi, "$1 миллилитров")
+      .replace(/(\d)\s*кг(?![а-яё])/gi, "$1 килограмм").replace(/\s*°\s*[CС]?/g, " градусов").replace(/[«»"]/g, "");
+  }
   $("speakBtn").onclick = () => {
     if (speaking) { if (tts) tts.stop(); else { synth.cancel(); setSpeaking(false); } return; }
-    const lines = speechLines(), rate = +$("rateSel").value, lang = outLang === "ru" ? "ru" : "uz";
+    const ru = outLang === "ru", lang = "ru";
+    const lines = speechLines().map(s => tidyForSpeech(ru ? s : uzToRu(s), ru));
     if (!lines.length) return;
     if (tts) {
       tts.speak(lines.map(text => ({ text })), { voice: $("voiceSel").value || "buttery", rate, language: lang })
