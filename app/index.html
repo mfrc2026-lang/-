@@ -120,7 +120,7 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .voice { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .voice label { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: .9rem; }
 .rate { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; }
-.rate .grp button { font-size: 1.35rem; min-width: 52px; justify-content: center; }
+.rate .grp button { min-width: 56px; justify-content: center; font-variant-numeric: tabular-nums; }
 .rate .grp button:disabled { cursor: not-allowed; opacity: .4; }
 .rate output { align-self: center; min-width: 4.2em; padding: 0 .4rem; text-align: center; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
 
@@ -253,10 +253,11 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
         <label><span data-i18n="voice">Голос</span> <select id="voiceSel"></select></label>
         <div class="rate" role="group" data-i18n-aria="speed" aria-label="Скорость">
           <span class="lbl" data-i18n="speed">Скорость</span>
-          <div class="grp">
-            <button id="slower" type="button" data-i18n-aria="slower" aria-label="Медленнее">−</button>
-            <output id="rateOut" aria-live="polite">90%</output>
-            <button id="faster" type="button" data-i18n-aria="faster" aria-label="Быстрее">+</button>
+          <div class="grp" id="rateGrp">
+            <button type="button" data-rate="0.5" aria-pressed="false">0.5×</button>
+            <button type="button" data-rate="1" aria-pressed="true">1×</button>
+            <button type="button" data-rate="1.5" aria-pressed="false">1.5×</button>
+            <button type="button" data-rate="2" aria-pressed="false">2×</button>
           </div>
         </div>
       </div>
@@ -820,17 +821,19 @@ ${currentSrc}
     sel.closest("label").hidden = sel.options.length < 2;
   }
   $("voiceSel").onchange = () => store.set("voice", $("voiceSel").value);
-  let rate = +(store.get("rate") || 0.9); if (!(rate >= 0.7 && rate <= 1.5)) rate = 0.9;
-  function setRate(v) {
-    rate = Math.round(Math.min(1.5, Math.max(0.7, v)) * 10) / 10;
-    $("rateOut").textContent = Math.round(rate * 100) + "%";
-    $("slower").disabled = rate <= 0.7; $("faster").disabled = rate >= 1.5;
-    store.set("rate", String(rate));
-    if (tts && speaking) tts.setRate(rate);
+  // Telegram-style speeds. Claude's voice accepts only 0.7–1.5, so the ends are mapped into that range;
+  // the browser's own voice plays the exact speed.
+  const RATES = ["0.5", "1", "1.5", "2"];
+  const TTS_RATE = { "0.5": 0.7, "1": 1, "1.5": 1.25, "2": 1.5 };
+  let rateKey = RATES.includes(store.get("speed")) ? store.get("speed") : "1";
+  function setRate(k) {
+    rateKey = k;
+    document.querySelectorAll("#rateGrp button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.rate === k)));
+    store.set("speed", k);
+    if (tts && speaking) tts.setRate(TTS_RATE[k]);
   }
-  $("slower").onclick = () => setRate(rate - 0.1);
-  $("faster").onclick = () => setRate(rate + 0.1);
-  setRate(rate);
+  document.querySelectorAll("#rateGrp button").forEach(b => b.onclick = () => setRate(b.dataset.rate));
+  setRate(rateKey);
 
   // Short sentences with clear ends: the voice pauses on each one.
   function speechLines() {
@@ -871,7 +874,7 @@ ${currentSrc}
     const lines = speechLines().map(s => tidyForSpeech(ru ? s : uzToRu(s), ru));
     if (!lines.length) return;
     if (tts) {
-      tts.speak(lines.map(text => ({ text })), { voice: $("voiceSel").value || "buttery", rate, language: lang })
+      tts.speak(lines.map(text => ({ text })), { voice: $("voiceSel").value || "buttery", rate: TTS_RATE[rateKey], language: lang })
         .catch(e => { if (e && e.code === "not_granted") $("voiceBox").hidden = true; });
     } else if (synth) {
       try {
@@ -879,7 +882,7 @@ ${currentSrc}
         const v = synth.getVoices().find(x => x.name === $("voiceSel").value) || sysVoices()[0];
         lines.forEach((text, i) => {
           const u = new SpeechSynthesisUtterance(text);
-          u.lang = lang === "ru" ? "ru-RU" : "uz-UZ"; if (v) u.voice = v; u.rate = rate;
+          u.lang = lang === "ru" ? "ru-RU" : "uz-UZ"; if (v) u.voice = v; u.rate = +rateKey;
           if (i === lines.length - 1) u.onend = () => setSpeaking(false);
           u.onerror = () => setSpeaking(false);
           synth.speak(u);
